@@ -1,0 +1,88 @@
+.card {
+    width: 100%;
+    max-width: 400px;
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.title {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.subtitle {
+    font-size: 12px;
+    color: var(--color-muted);
+    margin-top: -8px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.field label {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.field input {
+    height: 40px;
+    padding: 0 12px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: #fff;
+    color: var(--color-text);
+}
+
+.field input:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 1px;
+}
+
+.field input[aria-invalid='true'] {
+    border-color: var(--color-danger);
+}
+
+.error {
+    font-size: 12px;
+    color: var(--color-danger);
+}
+
+.alert {
+    font-size: 14px;
+    color: var(--color-danger);
+    background: #fef2f2;
+    border: 1px solid var(--color-danger);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+}
+
+.button {
+    height: 40px;
+    border: none;
+    border-radius: var(--radius-md);
+    background: var(--color-primary);
+    color: #fff;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}   
