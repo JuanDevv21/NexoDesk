@@ -69,6 +69,7 @@ body {
   --radius-md: 10px;
   --radius-lg: 12px;
   --radius-xl: 18px;
+  color-scheme: light;
 }
 
 *,
