@@ -1,0 +1,239 @@
+.title {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.subtitle {
+    font-size: 12px;
+    color: var(--color-muted);
+    margin-top: 4px;
+}
+
+.layout {
+    display: grid;
+    gap: 16px;
+    margin-top: 24px;
+    align-items: start;
+}
+
+@media (min-width: 1024px) {
+    .layout {
+    grid-template-columns: 340px 1fr;
+    }
+}
+
+.card {
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+}
+
+.cardTitle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* Formulario */
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.field label {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.field input,
+.field select {
+    height: 40px;
+    padding: 0 12px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: #fff;
+    color: var(--color-text);
+}
+
+.field input:focus,
+.field select:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 1px;
+}
+
+.field input[aria-invalid='true'],
+.field select[aria-invalid='true'] {
+    border-color: var(--color-danger);
+}
+
+.hint {
+    font-size: 12px;
+    color: var(--color-muted);
+}
+
+.error {
+    font-size: 12px;
+    color: var(--color-danger);
+}
+
+.alert,
+.success {
+    font-size: 14px;
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+}
+
+.alert {
+    color: var(--color-danger);
+    background: #fef2f2;
+    border: 1px solid var(--color-danger);
+}
+
+.success {
+    color: var(--color-success);
+    background: #f0fdf4;
+    border: 1px solid var(--color-success);
+}
+
+.button {
+    height: 40px;
+    border: none;
+    border-radius: var(--radius-md);
+    background: var(--color-primary);
+    color: #fff;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Tabla */
+.tableCard {
+    padding: 0;
+    overflow: hidden;
+}
+
+.cardHeader {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.tableWrap {
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.table th {
+    text-align: left;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--color-muted);
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--color-border);
+    white-space: nowrap;
+}
+
+.table td {
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.badgeAdmin {
+    background: var(--color-primary-soft);
+    color: var(--color-primary);
+}
+
+.badgeEmployee,
+.badgeInactive {
+    background: var(--color-bg);
+    color: var(--color-neutral);
+}
+
+.badgeActive {
+    background: color-mix(in srgb, var(--color-success) 12%, white);
+    color: var(--color-success);
+}
+
+/* Acceso denegado */
+.denied {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    margin-top: 24px;
+    max-width: 480px;
+    padding: 16px 20px;
+    background: #fff;
+    border: 1px solid var(--color-danger);
+    border-radius: var(--radius-lg);
+    color: var(--color-danger);
+}
+
+.deniedTitle {
+    font-weight: 600;
+}
+
+.deniedText {
+    font-size: 12px;
+    color: var(--color-muted);
+    margin-top: 2px;
+}
+
+.selectWrap {
+    position: relative;
+}
+
+.selectWrap select {
+    width: 100%;
+    appearance: none;
+    -webkit-appearance: none;
+    padding-right: 36px;
+    background: #fff;
+    color: var(--color-text);
+    cursor: pointer;
+    height: 30px;
+    padding: 0px 5px;
+}
+
+.selectWrap option {
+    background: #fff;
+    color: var(--color-text);
+}
+
+.selectIcon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-muted);
+    pointer-events: none;
+}
