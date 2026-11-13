@@ -38,6 +38,6 @@ export async function login(prevState, formData) {
   }
 
   // Si pasa las validaciones ejecuta createSession y le envia el Id y el rol para firmar la cookie para luego redireccionarlo al panel principal
-  await createSession({userId: user.id, role: user.role})
+  await createSession({userId: user.id, role: user.role, tokenVersion: user.tokenVersion})
   redirect('/')
 }
