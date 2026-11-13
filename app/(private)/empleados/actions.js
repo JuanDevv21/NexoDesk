@@ -7,6 +7,7 @@ import { getCurrentUser } from '../../../lib/auth'
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const VALID_ROLES = ['ADMIN', 'EMPLOYEE']
+const ROLE_LABELS = {ADMIN: 'Administrador', EMPLOYEE: 'Empleado'}
 
 export async function createEmployee(prevState, formData) {
   // Criterio 1: la acción verifica el rol por sí misma
@@ -42,11 +43,9 @@ export async function createEmployee(prevState, formData) {
     return { errors, values: { name, email, role } }
   }
 
-  // Criterio 7: se guarda el hash, nunca la contraseña
   const passwordHash = await bcrypt.hash(password, 10)
 
   try {
-    // Criterio 5: `active` queda en true por el valor por defecto del schema
     await prisma.user.create({ data: { name, email, passwordHash, role } })
   } catch (error) {
     // Criterio 3: P2002 = se violó una restricción @unique (correo repetido)
@@ -62,4 +61,82 @@ export async function createEmployee(prevState, formData) {
   revalidatePath('/empleados')
 
   return { success: true, message: `${name} fue registrado correctamente` }
+}
+
+export async function changeRole(prevState, formData) {
+  const admin = await getCurrentUser()
+  if (!admin || admin.role !== 'ADMIN') {
+    return {
+      success: false,
+      message: 'Acceso denegado: solo los administradores pueden cambiar roles.',
+    }
+  }
+
+  const userId = Number(formData.get('userId'))
+  const role = String(formData.get('role') ?? '')
+
+  if (!Number.isInteger(userId) || !VALID_ROLES.includes(role)) {
+    return { success: false, message: 'La solicitud no es válida.' }
+  }
+
+  try {
+    const result = await prisma.$transaction(
+      async (tx) => {
+        const target = await tx.user.findUnique({
+          where: { id: userId },
+          select: { id: true, name: true, role: true, active: true },
+        })
+
+        if (!target) {
+          return { success: false, message: 'El usuario no existe.' }
+        }
+
+        if (target.role === role) {
+          return {
+            success: false,
+            message: `${target.name} ya tiene el rol de ${ROLE_LABELS[role]}.`,
+          }
+        }
+
+        if (target.role === 'ADMIN' && target.active) {
+          const activeAdmins = await tx.user.count({
+            where: { role: 'ADMIN', active: true },
+          })
+
+          if (activeAdmins <= 1) {
+            return {
+              success: false,
+              message:
+                target.id === admin.id
+                  ? 'No puedes quitarte el rol de Administrador: eres el único administrador activo.'
+                  : `No puedes quitar el rol de Administrador a ${target.name}: es el único administrador activo.`,
+            }
+          }
+        }
+
+        await tx.user.update({ where: { id: target.id }, data: { role } })
+
+        return {
+          success: true,
+          message: `El rol de ${target.name} ahora es ${ROLE_LABELS[role]}.`,
+        }
+      },
+      { isolationLevel: 'Serializable' }
+    )
+
+    if (result.success) {
+      revalidatePath('/', 'layout')
+    }
+
+    return result
+  } catch (error) {
+    // P2034: dos cambios chocaron al mismo tiempo (conflicto o deadlock)
+    if (error.code === 'P2034') {
+      return {
+        success: false,
+        message: 'Otro cambio se estaba aplicando al mismo tiempo. Inténtalo de nuevo.',
+      }
+    }
+    throw error
+  }
 }
