@@ -1,0 +1,221 @@
+.title {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.subtitle {
+    font-size: 12px;
+    color: var(--color-muted);
+    margin-top: 4px;
+}
+
+.muted {
+    color: var(--color-muted);
+}
+
+.section {
+    margin-top: 24px;
+}
+
+.pageHeader {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.primaryLink {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 40px;
+    padding: 0 16px;
+    border-radius: var(--radius-md);
+    background: var(--color-primary);
+    color: #fff;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.primaryLink:hover {
+    opacity: 0.9;
+}
+
+.primaryLink:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+.backLink {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 16px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-muted);
+    text-decoration: none;
+}
+
+.backLink:hover {
+    color: var(--color-text);
+}
+
+/* Formulario */
+.formWrap {
+    margin-top: 24px;
+    max-width: 560px;
+}
+
+.card {
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.field label {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.field input {
+    height: 40px;
+    padding: 0 12px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: #fff;
+    color: var(--color-text);
+}
+
+.field input:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 1px;
+}
+
+.field input[aria-invalid='true'] {
+    border-color: var(--color-danger);
+}
+
+.hint {
+    font-size: 12px;
+    color: var(--color-muted);
+}
+
+.error {
+    font-size: 12px;
+    color: var(--color-danger);
+}
+
+.alert,
+.success {
+    font-size: 14px;
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+}
+
+.alert {
+    color: var(--color-danger);
+    background: #fef2f2;
+    border: 1px solid var(--color-danger);
+}
+
+.success {
+    color: var(--color-success);
+    background: #f0fdf4;
+    border: 1px solid var(--color-success);
+}
+
+.successLink {
+    color: inherit;
+    font-weight: 500;
+    text-decoration: underline;
+}
+
+.button {
+    height: 40px;
+    border: none;
+    border-radius: var(--radius-md);
+    background: var(--color-primary);
+    color: #fff;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Tabla */
+.tableCard {
+    padding: 0;
+    overflow: hidden;
+}
+
+.cardHeader {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--color-border);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.tableWrap {
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.table th {
+    text-align: left;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--color-muted);
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--color-border);
+    white-space: nowrap;
+}
+
+.table td {
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.badgeActive {
+    background: color-mix(in srgb, var(--color-success) 12%, white);
+    color: var(--color-success);
+}
+
+.badgeInactive {
+    background: var(--color-bg);
+    color: var(--color-neutral);
+}
