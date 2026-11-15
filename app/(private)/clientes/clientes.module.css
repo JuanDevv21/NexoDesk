@@ -219,3 +219,150 @@
     background: var(--color-bg);
     color: var(--color-neutral);
 }
+
+/* Estado vacío */
+.emptyState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 48px 20px;
+    text-align: center;
+    color: var(--color-muted);
+}
+
+.emptyTitle {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+/* Nombre del cliente como enlace en la tabla */
+.rowLink {
+    font-weight: 500;
+    color: var(--color-text);
+    text-decoration: none;
+}
+
+.rowLink:hover {
+    color: var(--color-primary);
+    text-decoration: underline;
+}
+
+.rowLink:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+}
+
+/* Paginación */
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding: 12px 20px;
+    border-top: 1px solid var(--color-border);
+}
+
+.paginationInfo,
+.pageIndicator {
+    font-size: 12px;
+    color: var(--color-muted);
+}
+
+.paginationControls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.pageButton {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    height: 32px;
+    padding: 0 10px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: #fff;
+    color: var(--color-text);
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.pageButton:hover {
+    background: var(--color-bg);
+}
+
+.pageButton:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+.pageButtonDisabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* Detalle */
+.detailHeader {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.detailCard {
+    margin-top: 24px;
+    max-width: 640px;
+}
+
+.detailList {
+    display: grid;
+    gap: 16px;
+}
+
+@media (min-width: 640px) {
+    .detailList {
+    grid-template-columns: 1fr 1fr;
+    }
+}
+
+.detailItem dt {
+    font-size: 12px;
+    color: var(--color-muted);
+    margin-bottom: 2px;
+}
+
+.detailItem dd {
+    font-size: 14px;
+    word-break: break-word;
+}
+
+/* Cliente no encontrado */
+.notFound {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    max-width: 480px;
+    padding: 16px 20px;
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    color: var(--color-neutral);
+}
+
+.notFoundTitle {
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+.notFoundText {
+    font-size: 12px;
+    color: var(--color-muted);
+    margin-top: 2px;
+}
