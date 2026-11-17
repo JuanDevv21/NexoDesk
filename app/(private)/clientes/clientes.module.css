@@ -410,3 +410,134 @@
     outline: 2px solid var(--color-primary);
     outline-offset: 2px;
 }
+
+/* Tarjeta de estado */
+.statusCard {
+    margin-top: 16px;
+    max-width: 640px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.sectionTitle {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.statusRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.statusText {
+    flex: 1 1 280px;
+    font-size: 14px;
+    color: var(--color-muted);
+}
+
+/* Botones de estado */
+.dangerButton,
+.secondaryButton {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 40px;
+    padding: 0 16px;
+    border-radius: var(--radius-md);
+    background: #fff;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.dangerButton {
+    border: 1px solid var(--color-danger);
+    color: var(--color-danger);
+}
+
+.dangerButton:hover {
+    background: color-mix(in srgb, var(--color-danger) 8%, white);
+}
+
+.secondaryButton {
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+}
+
+.secondaryButton:hover {
+    background: var(--color-bg);
+}
+
+.dangerButton:focus-visible,
+.secondaryButton:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+.dangerSolid {
+    height: 40px;
+    border: none;
+    border-radius: var(--radius-md);
+    background: var(--color-danger);
+    color: #fff;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.dangerSolid:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Diálogo de confirmación */
+.dialog {
+    width: calc(100% - 32px);
+    max-width: 440px;
+    margin: auto;
+    padding: 24px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    background: #fff;
+    color: var(--color-text);
+}
+
+.dialog::backdrop {
+    background: rgb(16 24 40 / 0.5);
+}
+
+.dialogTitle {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.dialogText {
+    margin-top: 12px;
+}
+
+.dialogActions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 20px;
+}
+
+.dialogActions button {
+    padding: 0 16px;
+}
+
+.buttonSecondary {
+    height: 40px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: #fff;
+    color: var(--color-text);
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.buttonSecondary:hover {
+    background: var(--color-bg);
+}

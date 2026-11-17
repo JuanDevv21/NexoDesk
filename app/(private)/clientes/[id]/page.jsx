@@ -7,6 +7,8 @@ import { parseId } from '../../../../lib/ids'
 import { adminGuard } from '../../_components/adminGuard'
 import ClientNotFound from '../ClientNotFound'
 import styles from '../clientes.module.css'
+import ClientStatusCard from '../ClientStatusCard'
+import { setClienteActive } from '../actions'
 
 const ClientDetail = async ({ params }) => {
     const denied = await adminGuard()
@@ -87,6 +89,13 @@ const ClientDetail = async ({ params }) => {
                 </div>
             </dl>
         </section>
+        
+        <ClientStatusCard
+        clientName={client.name}
+        active={client.active}
+        action={setClienteActive.bind(null, client.id, !client.active)}>
+
+        </ClientStatusCard>
     </>
     )
 }
