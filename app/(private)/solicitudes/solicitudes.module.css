@@ -1,0 +1,56 @@
+.badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+/* Estados */
+.statusOpen {
+    color: var(--color-info);
+    background: color-mix(in srgb, var(--color-info) 12%, white);
+}
+
+.statusInProgress {
+    color: var(--color-warning);
+    background: color-mix(in srgb, var(--color-warning) 12%, white);
+}
+
+.statusPending {
+    color: var(--color-pending);
+    background: color-mix(in srgb, var(--color-pending) 12%, white);
+}
+
+.statusResolved {
+    color: var(--color-success);
+    background: color-mix(in srgb, var(--color-success) 12%, white);
+}
+
+/* Prioridades */
+.priorityLow {
+    color: var(--color-neutral);
+    background: var(--color-bg);
+}
+
+.priorityMedium {
+    color: var(--color-info);
+    background: color-mix(in srgb, var(--color-info) 12%, white);
+}
+
+.priorityHigh {
+    color: var(--color-warning);
+    background: color-mix(in srgb, var(--color-warning) 12%, white);
+}
+
+.priorityUrgent {
+    color: var(--color-danger);
+    background: color-mix(in srgb, var(--color-danger) 12%, white);
+}
+
+.number {
+    font-weight: 600;
+    color: var(--color-muted);
+    white-space: nowrap;
+}
