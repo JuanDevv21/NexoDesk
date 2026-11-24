@@ -8,7 +8,7 @@ const HeaderNav = async () => {
     return (
         <nav className={styles.nav}>
             <Link href="/" className={styles.navLink}>Inicio</Link>
-            {user?.role === 'EMPLOYEE' && (
+            {user && (
                 <Link
                 href="/mis-solicitudes"
                 className={styles.navLink}
