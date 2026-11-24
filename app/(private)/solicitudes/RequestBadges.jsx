@@ -23,6 +23,6 @@ export const StatusBadge = ({status}) => (
 
 export const PriorityBadge = ({priority}) => (
     <span className={`${styles.badge} ${PRIORITY_CLASS[priority] ?? ''}`}>
-        {PRIORITY_CLASS[priority] ?? priority}
+        {PRIORITY_LABELS[priority] ?? priority}
     </span>
 )

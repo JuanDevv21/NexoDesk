@@ -37,7 +37,7 @@ const NewRequestContent = async () => {
                     <Link href="/clientes/nuevo" className={ui.primaryLink}>Registrar un cliente</Link>
                 </div>
             ) : (
-                <div className={ui.formWarp}>
+                <div className={ui.formWrap}>
                     <RequestForm action={createRequest} clients={clients}></RequestForm>
                 </div>
             )}
