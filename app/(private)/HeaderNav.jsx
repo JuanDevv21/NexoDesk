@@ -8,6 +8,14 @@ const HeaderNav = async () => {
     return (
         <nav className={styles.nav}>
             <Link href="/" className={styles.navLink}>Inicio</Link>
+            {user?.role === 'EMPLOYEE' && (
+                <Link
+                href="/mis-solicitudes"
+                className={styles.navLink}
+                prefetch={false}>
+                    Mis solicitudes
+                </Link>
+            )}
             {user?.role === 'ADMIN' && (
             <>
                 <Link href="/solicitudes" className={styles.navLink}>Solicitudes</Link>
