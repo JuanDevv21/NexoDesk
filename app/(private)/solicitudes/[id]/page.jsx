@@ -8,6 +8,8 @@ import { adminGuard } from '../../_components/adminGuard'
 import { StatusBadge, PriorityBadge } from '../RequestBadges'
 import ui from '../../_components/ui.module.css'
 import styles from '../solicitudes.module.css'
+import AssignRequestForm from '../AssignRequestForm'
+import { assignRequest } from '../actions'
 
 const RequestDetail = async ({params, searchParams}) => {
     const denied = await adminGuard()
@@ -30,9 +32,19 @@ const RequestDetail = async ({params, searchParams}) => {
             client: {
                 select: {name: true}
             },
-            assignedTo: { select: {name: true}}
+            assignedTo: { select: {name: true}},
+            assignedToId: true,
+            assignedAt: true,
         }
     })
+
+    const employees = request && request.status !== 'RESOLVED'
+        ? await prisma.user.findMany({
+            where: {role: 'EMPLOYEE', active: true},
+            select: { id: true, name: true, email: true},
+            orderBy: [{ name: 'asc'}, {id: 'asc'}],
+        })
+        : []
 
     return (
         <>
@@ -62,6 +74,10 @@ const RequestDetail = async ({params, searchParams}) => {
                                 <dd>{request.assignedTo?.name ?? 'Sin asignar'}</dd>
                             </div>
                             <div>
+                                <dt>Fecha de asignacion</dt>
+                                <dd>{request.assignedAt ? formatDateTime(request.assignedAt) : '-'}</dd>
+                            </div>
+                            <div>
                                 <dt>Estado</dt>
                                 <dd><StatusBadge status={request.status}></StatusBadge></dd>
                             </div>
@@ -78,7 +94,21 @@ const RequestDetail = async ({params, searchParams}) => {
                                 <dd>{request.description}</dd>
                             </div>
                         </dl>
-                    </section>               
+                    </section>
+                    {request.status === 'RESOLVED' ? (
+                        <section className={`${ui.card} ${ui.section}`}>
+                            <h2 className={ui.title}>Asignacion</h2>
+                            <p className={ui.muted}>
+                                Esta solicitud está resuelta. Reábrela antes de asignarla o reasignarla 
+                            </p>
+                        </section>
+                    ) : (
+                        <AssignRequestForm
+                        action={assignRequest.bind(null, request.id)}
+                        employees={employees}
+                        assignedToId={request.assignedToId}
+                        ></AssignRequestForm>
+                    )}
                 </>
             )}
         </>
