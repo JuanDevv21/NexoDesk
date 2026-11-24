@@ -6,15 +6,16 @@ const HeaderNav = async () => {
     const user = await getCurrentUser()
 
     return (
-    <nav className={styles.nav}>
-        <Link href="/" className={styles.navLink}>Inicio</Link>
-        {user?.role === 'ADMIN' && (
+        <nav className={styles.nav}>
+            <Link href="/" className={styles.navLink}>Inicio</Link>
+            {user?.role === 'ADMIN' && (
             <>
-                <Link href="/empleados" className={styles.navLink}>Empleados</Link>
+                <Link href="/solicitudes" className={styles.navLink}>Solicitudes</Link>
                 <Link href="/clientes" className={styles.navLink}>Clientes</Link>
+                <Link href="/empleados" className={styles.navLink}>Empleados</Link>
             </>
-        )}
-    </nav>
+            )}
+        </nav>
     )
 }
 

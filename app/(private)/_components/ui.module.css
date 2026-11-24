@@ -1,0 +1,289 @@
+/* Texto y estructura */
+.title {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.subtitle {
+    font-size: 12px;
+    color: var(--color-muted);
+    margin-top: 4px;
+}
+
+.muted {
+    color: var(--color-muted);
+}
+
+.section {
+    margin-top: 24px;
+}
+
+.pageHeader {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+/* Enlaces con aspecto de botón */
+.primaryLink {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 40px;
+    padding: 0 16px;
+    border-radius: var(--radius-md);
+    background: var(--color-primary);
+    color: #fff;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.primaryLink:hover {
+    opacity: 0.9;
+}
+
+.secondaryLink {
+    display: inline-flex;
+    align-items: center;
+    height: 40px;
+    padding: 0 16px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: #fff;
+    color: var(--color-text);
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.secondaryLink:hover {
+    background: var(--color-bg);
+}
+
+.primaryLink:focus-visible,
+.secondaryLink:focus-visible,
+.backLink:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+.backLink {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 16px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-muted);
+    text-decoration: none;
+}
+
+.backLink:hover {
+    color: var(--color-text);
+}
+
+/* Tarjeta y formulario */
+.card {
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+}
+
+.formWrap {
+    margin-top: 24px;
+    max-width: 640px;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.f  ield {
+  display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.field label {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.field input,
+.field select,
+.field textarea {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: #fff;
+    color: var(--color-text);
+}
+
+.field input,
+.field select {
+    height: 40px;
+    padding: 0 12px;
+}
+
+.field textarea {
+    min-height: 140px;
+    padding: 10px 12px;
+    line-height: 1.5;
+    resize: vertical;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 1px;
+}
+
+.field input[aria-invalid='true'],
+.field select[aria-invalid='true'],
+.field textarea[aria-invalid='true'] {
+    border-color: var(--color-danger);
+}
+
+.selectWrap {
+    position: relative;
+}
+
+.selectWrap select {
+    width: 100%;
+    appearance: none;
+    -webkit-appearance: none;
+    padding-right: 36px;
+    cursor: pointer;
+}
+
+.selectIcon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-muted);
+    pointer-events: none;
+}
+
+.hint {
+    font-size: 12px;
+    color: var(--color-muted);
+}
+
+.error {
+    font-size: 12px;
+    color: var(--color-danger);
+}
+
+/* Avisos */
+.alert,
+.success {
+    font-size: 14px;
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+}
+
+.alert {
+    color: var(--color-danger);
+    background: #fef2f2;
+    border: 1px solid var(--color-danger);
+}
+
+.success {
+    color: var(--color-success);
+    background: #f0fdf4;
+    border: 1px solid var(--color-success);
+}
+
+.successLink {
+    color: inherit;
+    font-weight: 500;
+    text-decoration: underline;
+}
+
+/* Botón */
+.button {
+    height: 40px;
+    padding: 0 20px;
+    border: none;
+    border-radius: var(--radius-md);
+    background: var(--color-primary);
+    color: #fff;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.formActions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+/* Tabla */
+.tableCard {
+    padding: 0;
+    overflow: hidden;
+}
+
+.cardHeader {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--color-border);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.tableWrap {
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.table th {
+    text-align: left;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--color-muted);
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--color-border);
+    white-space: nowrap;
+}
+
+.table td {
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Estado vacío */
+.emptyState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 48px 20px;
+    text-align: center;
+    color: var(--color-muted);
+}
+
+.emptyTitle {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-text);
+}
