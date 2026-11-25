@@ -133,6 +133,7 @@ export async function assignRequest(requestId, _prevState, formData) {
         revalidatePath(`/solicitudes/${id}`)
         revalidatePath('/solicitudes')
         revalidatePath('/mis-solicitudes')
+        revalidatePath(`/mis-solicitudes/${id}`)
     }
 
     return result
