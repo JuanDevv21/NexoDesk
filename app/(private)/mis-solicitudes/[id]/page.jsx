@@ -31,6 +31,7 @@ const MyRequestDetail = async ({params, searchParams}) => {
             title: true,
             description: true,
             status: true,
+            priority: true,
             assignedAt: true,
             client: { select: {name: true}},
         },
