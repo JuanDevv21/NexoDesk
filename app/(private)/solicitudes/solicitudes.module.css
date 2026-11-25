@@ -105,3 +105,15 @@
 .description dd {
     white-space: pre-wrap;
 }
+
+.filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.filters > div {
+    flex: 0 1 180px;
+}
