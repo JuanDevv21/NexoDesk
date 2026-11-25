@@ -8,6 +8,8 @@ import { prisma } from '../../../../lib/prisma'
 import ui from '../../_components/ui.module.css'
 import { StatusBadge, PriorityBadge } from '../../solicitudes/RequestBadges'
 import styles from '../../solicitudes/solicitudes.module.css'
+import ChangeRequestStatusForm from '../../solicitudes/ChangeRequestStatusForm'
+import { changeRequestStatus } from '../../solicitudes/actions'
 
 const MyRequestDetail = async ({params, searchParams}) => {
     const user = await getCurrentUser()
@@ -34,6 +36,9 @@ const MyRequestDetail = async ({params, searchParams}) => {
             priority: true,
             assignedAt: true,
             client: { select: {name: true}},
+            assignedToId: true,
+            updatedAt: true,
+            resolvedAt: true,
         },
     })
 
@@ -85,6 +90,14 @@ const MyRequestDetail = async ({params, searchParams}) => {
                                 <dd>
                                     {request.description}
                                 </dd>
+                            </div>
+                            <div>
+                                <dt>Ultima modificación</dt>
+                                <dd>{formatDateTime(request.updatedAt)}</dd>
+                            </div>
+                            <div>
+                                <dt>Fecha de resolución</dt>
+                                <dd>{request.resolvedAt ? formatDateTime(request.resolvedAt): '-' }</dd>
                             </div>
                         </dl>
                     </section>

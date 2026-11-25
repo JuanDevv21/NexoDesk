@@ -5,6 +5,7 @@ import { prisma } from "../../../lib/prisma"
 import { getCurrentUser } from "../../../lib/auth"
 import { parseRequestForm } from "../../../lib/requestValidation"
 import { parseId } from '../../../lib/ids'
+import { REQUEST_STATUS_TRANSITIONS, STATUSES, STATUS_LABELS } from "../../../lib/requestConstants"
 
 export async function createRequest(prevState, formData) {
     const admin = await getCurrentUser()
@@ -132,6 +133,101 @@ export async function assignRequest(requestId, _prevState, formData) {
         revalidatePath(`/solicitudes/${id}`)
         revalidatePath('/solicitudes')
         revalidatePath('/mis-solicitudes')
+    }
+
+    return result
+}
+
+export async function changeRequestStatus (requestId, _prevState, formData) {
+    const user = await getCurrentUser()
+
+    if (!user || !['ADMIN', 'EMPLOYEE'].includes(user.role)) {
+        return { type: 'error', message: 'Acceso denegado'}
+    }
+
+    const id = parseId(String(requestId))
+    const nextStatus = formData.get('status')
+
+    if (id === null) {
+        return { type: 'error', message: 'La solicitud no existe'}
+    }
+
+    let result
+
+    try {
+        result = await prisma.$transaction(async (tx) => {
+            const request = await tx.serviceRequest.findUnique({
+                where: {id},
+                select: {status: true, assignedToId: true},
+            })
+
+            if (!request) {
+                return { type: 'error', message: `La solicitud #${id} no existe`}
+            }
+
+            if (user.role !== 'ADMIN' && request.assignedToId !== user.id) {
+                return {
+                    type: 'error',
+                    message: 'Acceso denegado. Solo puedes cambiar el estado de tus solicitudes'
+                }
+            }
+
+            if (!STATUSES.includes(nextStatus)) {
+                return { type: 'error', message: 'Selecciona un estado valido'}
+            }
+
+            if (nextStatus === request.status) {
+                return {
+                    type: 'info',
+                    message: `La solicitud #${id} ya esta en el estado «${STATUS_LABELS[nextStatus]}»`
+                }
+            }
+
+            if (!REQUEST_STATUS_TRANSITIONS[request.status].includes(nextStatus)) {
+                return {
+                    type: 'error',
+                    message: request.status === 'RESOLVED'
+                    ? 'Para reabrir una solicitud resuelta, cambiala a En progreso'
+                    : 'Abierta es el estado inicial. La solicitud ya salio de ese estado'
+                }
+            }
+
+            if (request.assignedToId === null) {
+                return {
+                    type: 'error',
+                    message: 'Asigna un responsable antes de cambiar el estado de la solicitud'
+                }
+            }
+
+            await tx.serviceRequest.update({
+                where: {id},
+                data: {
+                    status: nextStatus,
+                    resolvedAt: nextStatus === 'RESOLVED' ? new Date() : null,
+                },
+            })
+
+            return {
+                type: 'success',
+                message: `La solicitud #${id} pasó a «${STATUS_LABELS[nextStatus]}»`
+            }
+        }, {isolationLevel: 'Serializable'})
+    } catch(error) {
+        if (error?.code === 'P2034'){
+            return {
+                type: 'error',
+                message: 'La solicitud cambió mientras guardabas. Vuelve a intentarlo',
+            }
+        }
+
+        throw error
+    }
+
+    if (result.type === 'success') {
+        revalidatePath('/solicitudes')
+        revalidatePath(`/solicitudes/${id}`)
+        revalidatePath('/mis-solicitudes')
+        revalidatePath(`/mis-solicitudes/${id}`)
     }
 
     return result

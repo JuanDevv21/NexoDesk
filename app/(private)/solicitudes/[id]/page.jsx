@@ -9,7 +9,9 @@ import { StatusBadge, PriorityBadge } from '../RequestBadges'
 import ui from '../../_components/ui.module.css'
 import styles from '../solicitudes.module.css'
 import AssignRequestForm from '../AssignRequestForm'
-import { assignRequest } from '../actions'
+import ChangeRequestStatusForm from '../ChangeRequestStatusForm'
+import { assignRequest, changeRequestStatus } from '../actions'
+
 
 const RequestDetail = async ({params, searchParams}) => {
     const denied = await adminGuard()
@@ -35,6 +37,8 @@ const RequestDetail = async ({params, searchParams}) => {
             assignedTo: { select: {name: true}},
             assignedToId: true,
             assignedAt: true,
+            updatedAt: true,
+            resolvedAt: true,
         }
     })
 
@@ -95,6 +99,14 @@ const RequestDetail = async ({params, searchParams}) => {
                             </div>
                         </dl>
                     </section>
+
+                    <ChangeRequestStatusForm
+                    action={changeRequestStatus.bind(null, request.id)}
+                    requestId={request.id}
+                    title={request.title}
+                    currentStatus={request.status}
+                    hasAssignee={request.assignedToId !== null}
+                    />
                     {request.status === 'RESOLVED' ? (
                         <section className={`${ui.card} ${ui.section}`}>
                             <h2 className={ui.title}>Asignacion</h2>
