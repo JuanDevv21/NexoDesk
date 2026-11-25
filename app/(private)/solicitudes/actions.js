@@ -73,7 +73,7 @@ export async function assignRequest(requestId, _prevState, formData) {
         result = await prisma.$transaction(async(tx) => {
             const request = await tx.serviceRequest.findUnique({
                 where: {id},
-                select: { status: true, assignedTo: true},
+                select: { status: true, assignedToId: true},
             })
 
             if (!request) {
