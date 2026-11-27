@@ -233,3 +233,87 @@ export async function changeRequestStatus (requestId, _prevState, formData) {
 
     return result
 }
+
+export async function addRequestComment(requestId, formData) {
+    const user = await getCurrentUser()
+
+    if (!user || !['ADMIN', 'EMPLOYEE'].includes(user.role)) {
+        return {
+            type: 'error', message: 'Acceso denegado'
+        }
+    }
+
+    const id = parseId(String(requestId))
+
+    if (id === null) {
+        return {type: 'error', message: 'La solicitud no existe'}
+    }
+
+    const submittedBody = formData.get('body')
+    const body = typeof submittedBody === 'string' ? submittedBody.trim() : ''
+
+    const accessDenied = {
+        type: 'error', message: 'Acceso denegado. Solo el responsable actual o un administrador puede comentar'
+    }
+
+    let result
+
+    try {
+        result = await prisma.$transaction(async(tx) => {
+            const request = await tx.serviceRequest.findUnique({
+                where: {id},
+                select: { assignedToId: true},
+            })
+
+            if (!request) {
+                return { type: 'error', message: `La solicitud #${id} no existe`}
+            }
+
+            if (user.role !== 'ADMIN' && request.assignedToId !== user.id) {
+                return accessDenied
+            }
+
+            if (!body) {
+                return { type: 'validation', message: 'Escribe un comentario antes de enviarlo' }
+            }
+
+            if (body.length > 1000) {
+                return {type: 'validation', message: 'El comentario no puede superar los 1000 caracteres'}
+            }
+
+            await tx.requestComment.create({
+                data: {
+                    body,
+                    requestId: id,
+                    authorId: user.id,
+                },
+            })
+
+            return { type: 'success', message: 'Comentario publicado'}
+        }, {isolationLevel: 'Serializable'})
+    } catch (error) {
+        if (error?.code !== 'P2034') throw error
+
+        const request = await prisma.serviceRequest.findUnique({
+            where: {id},
+            select: {assignedToId: true}
+        })
+
+        if (!request) {
+            return { type: 'error', message: `La solicitud #${id} no existe`}
+        }
+
+        if (user.role !== 'ADMIN' && request.assignedToId !== user.id){
+            return accessDenied
+        }
+
+        return {type: 'error', message: 'La solicitud cambió mientras enviabas el comentario, Intenta enviarlo de nuevo'}
+    }
+
+    if (result.type === 'success') {
+        revalidatePath(`/solicitudes/${id}`)
+        revalidatePath(`/mis-solicitudes/${id}`)
+    }
+
+    return result
+}

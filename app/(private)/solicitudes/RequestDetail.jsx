@@ -11,6 +11,8 @@ import ChangeRequestStatusForm from './ChangeRequestStatusForm'
 import { StatusBadge, PriorityBadge } from './RequestBadges'
 import { assignRequest, changeRequestStatus } from './actions'
 import styles from './solicitudes.module.css'
+import RequestCommentForm from './RequestCommentForm'
+import { addRequestComment} from './actions'
 
 export default async function RequestDetail({ params, searchParams, source }) {
     const user = await getCurrentUser()
@@ -65,6 +67,17 @@ export default async function RequestDetail({ params, searchParams, source }) {
                     active: true,
                 },
             },
+            comments: {
+                orderBy: [{ createdAt: 'asc'}, {id: 'asc'}],
+                select: {
+                    id: true,
+                    body: true,
+                    createdAt: true,
+                    author: {
+                        select: {name: true}
+                    }
+                }
+            }
         },
     })
 
@@ -202,6 +215,36 @@ export default async function RequestDetail({ params, searchParams, source }) {
                         <dd>{request.client.company || 'Sin registrar'}</dd>
                     </div>
                 </dl>
+            </section>
+
+            <section
+            className={`${ui.card} ${ui.section}`}
+            aria-labelledby="request-conversation-title"
+            >
+                <h2 id="request-conversation-title" className={ui.title}>Conversación</h2>
+
+                {request.comments.length === 0 ? (
+                <p className={`${ui.muted} ${ui.section}`}>Todavía no hay comentarios.</p>
+                ) : (
+                <ol className={styles.comments}>
+                    {request.comments.map((comment) => (
+                        <li key={comment.id} className={styles.comment}>
+                            <div className={styles.commentMeta}>
+                                <strong>{comment.author.name}</strong>
+                                <time
+                                className={ui.muted}
+                                dateTime={comment.createdAt.toISOString()}
+                                >
+                                    {formatDateTime(comment.createdAt)}
+                                </time>
+                            </div>
+
+                            <p className={styles.commentBody}>{comment.body}</p>
+                        </li>
+                    ))}
+                </ol>
+                )}
+                <RequestCommentForm action={addRequestComment.bind(null, request.id)} />
             </section>
 
             <ChangeRequestStatusForm
