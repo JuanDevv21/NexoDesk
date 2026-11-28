@@ -14,6 +14,11 @@ import styles from './solicitudes.module.css'
 import RequestCommentForm from './RequestCommentForm'
 import { addRequestComment} from './actions'
 
+const COMMENT_AUTHOR_ROLE_LABELS = {
+    ADMIN: 'Administrador',
+    EMPLOYEE: 'Empleado',
+}
+
 export default async function RequestDetail({ params, searchParams, source }) {
     const user = await getCurrentUser()
 
@@ -74,10 +79,10 @@ export default async function RequestDetail({ params, searchParams, source }) {
                     body: true,
                     createdAt: true,
                     author: {
-                        select: {name: true}
-                    }
-                }
-            }
+                        select: {name: true, role: true}
+                    },
+                },
+            },
         },
     })
 
@@ -221,29 +226,36 @@ export default async function RequestDetail({ params, searchParams, source }) {
             className={`${ui.card} ${ui.section}`}
             aria-labelledby="request-conversation-title"
             >
-                <h2 id="request-conversation-title" className={ui.title}>Conversación</h2>
+                <h2 id='request-conversation-title'>
+                    Comentarios ({request.comments.length})
+                </h2>
 
                 {request.comments.length === 0 ? (
-                <p className={`${ui.muted} ${ui.section}`}>Todavía no hay comentarios.</p>
+                    <p className={`${ui.muted} ${ui.section}`}></p>
                 ) : (
-                <ol className={styles.comments}>
-                    {request.comments.map((comment) => (
-                        <li key={comment.id} className={styles.comment}>
-                            <div className={styles.commentMeta}>
-                                <strong>{comment.author.name}</strong>
-                                <time
-                                className={ui.muted}
-                                dateTime={comment.createdAt.toISOString()}
-                                >
-                                    {formatDateTime(comment.createdAt)}
-                                </time>
-                            </div>
+                    <ol className={styles.comments}>
+                        {request.comments.map((comment) => (
+                            <li key={comment.id} className={styles.comment}>
+                                <div className={styles.commentMeta}>
+                                    <strong>{comment.author.name}</strong>
+                                    <span className={ui.muted}>
+                                        {COMMENT_AUTHOR_ROLE_LABELS[comment.author.role]
+                                        ?? comment.author.role}
+                                    </span>
 
-                            <p className={styles.commentBody}>{comment.body}</p>
-                        </li>
-                    ))}
-                </ol>
+                                    <time
+                                    className={ui.muted}
+                                    dateTime={comment.createdAt.toISOString()}>
+                                        {formatDateTime(comment.createdAt)}
+                                    </time>
+                                </div>
+
+                                <p className={styles.commentBody}>{comment.body}</p>
+                            </li>
+                        ))}
+                    </ol>
                 )}
+                
                 <RequestCommentForm action={addRequestComment.bind(null, request.id)} />
             </section>
 
