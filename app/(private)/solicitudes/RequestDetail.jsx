@@ -83,6 +83,18 @@ export default async function RequestDetail({ params, searchParams, source }) {
                     },
                 },
             },
+            ...(isAdmin ? {
+                changes: {
+                    orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
+                    select: {
+                        id: true,
+                        type: true,
+                        description: true,
+                        createdAt: true,
+                        actor: { select: { name: true } },
+                        },
+                    },
+            } : {}),
         },
     })
 
@@ -110,6 +122,23 @@ export default async function RequestDetail({ params, searchParams, source }) {
             </>
         )
     }
+
+    const history = isAdmin ? [...request.changes] : []
+
+    if (isAdmin && !history.some((change) => change.type === 'CREATED')) {
+        history.push({
+            id: `legacy-creation-${request.id}`,
+            type: 'CREATED',
+            description: 'Creo la solicitud',
+            createdAt: request.createdAt,
+            actor: request.createdBy,
+        })
+    }
+
+    const latestChange = history[0]
+    const lastModifiedBy = latestChange?.createdAt.getTime() === request.updatedAt.getTime()
+    ? latestChange.actor.name
+    : 'Autor no registrado'
 
     const isResolved = request.status === 'RESOLVED'
     const employees = isAdmin && !isResolved
@@ -151,7 +180,18 @@ export default async function RequestDetail({ params, searchParams, source }) {
 
                     <div>
                         <dt>Última modificación</dt>
-                        <dd>{formatDateTime(request.updatedAt)}</dd>
+                        <dd>
+                            <time dateTime={request.updatedAt.toISOString()}>
+                                {formatDateTime(request.updatedAt)}
+                            </time>
+
+                            {isAdmin && (
+                                <>
+                                    <br></br>
+                                    <span className={ui.muted}>{lastModifiedBy}</span>
+                                </>
+                            )}
+                        </dd>
                     </div>
 
                     <div>
@@ -258,6 +298,35 @@ export default async function RequestDetail({ params, searchParams, source }) {
                 
                 <RequestCommentForm action={addRequestComment.bind(null, request.id)} />
             </section>
+
+            {isAdmin && (
+                <section className={`${ui.card} ${ui.section}`} aria-labelledby='request-history-title'>
+                    <h2 id='request-history-title' className={ui.title}>
+                        Historial de modificaciones
+                    </h2>
+
+                    <ol className={styles.history}>
+                        {history.map((change) => (
+                            <li key={change.id} className={styles.historyItem}>
+                                <div className={styles.historyMeta}>
+                                    <strong>{change.actor.name}</strong>
+                                
+                                    <time
+                                    className={ui.muted}
+                                    dateTime={change.createdAt.toISOString()}>
+                                        {formatDateTime(change.createdAt)}
+                                    </time>
+                                </div>
+
+                                <p className={styles.historyDescription}>
+                                    {change.description}
+                                </p>
+                            </li>
+                        ))}
+                    </ol>
+                </section>
+            )}
+
 
             <ChangeRequestStatusForm
                 action={changeRequestStatus.bind(null, request.id)}

@@ -145,3 +145,43 @@
     white-space: pre-wrap;
     overflow-wrap: anywhere;
 }
+
+.history {
+    margin: 16px 0 0 6px;
+    padding: 0 0 0 18px;
+    border-inline-start: 2px solid var(--color-border);
+    list-style: none;
+}
+
+.historyItem {
+    position: relative;
+    padding-bottom: 16px;
+    overflow-wrap: anywhere;
+}
+
+.historyItem:last-child {
+    padding-bottom: 0;
+}
+
+.historyItem::before {
+    position: absolute;
+    inset-inline-start: -24px;
+    top: 5px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    content: '';
+}
+
+.historyMeta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 12px;
+    font-size: 14px;
+}
+
+.historyDescription {
+    margin: 4px 0 0;
+}

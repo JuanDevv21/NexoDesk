@@ -35,15 +35,27 @@ export async function createRequest(prevState, formData) {
         }
     }
 
+    const changedAt = new Date()
+
     const created = await prisma.serviceRequest.create({
         data: {
             title: values.title,
             description: values.description,
             priority: values.priority,
             clientId: client.id,
-            createdById: admin.id
+            createdById: admin.id,
+            createdAt: changedAt,
+            updatedAt: changedAt,
+            changes: {
+                create: {
+                    type: 'CREATED',
+                    description: 'Creó la solicitud',
+                    createdAt: changedAt,
+                    actor: { connect: {id: admin.id}},
+                },
+            },
         },
-        select: {id: true}
+        select: {id: true},
     })
 
     revalidatePath('/solicitudes')
@@ -73,7 +85,13 @@ export async function assignRequest(requestId, _prevState, formData) {
         result = await prisma.$transaction(async(tx) => {
             const request = await tx.serviceRequest.findUnique({
                 where: {id},
-                select: { status: true, assignedToId: true},
+                select: { 
+                    status: true,
+                    assignedToId: true,
+                    assignedTo: {
+                        select: {name: true}
+                    },
+                },
             })
 
             if (!request) {
@@ -107,11 +125,26 @@ export async function assignRequest(requestId, _prevState, formData) {
                 }
             }
 
+            const changedAt = new Date()
+            const previousAssigne = request.assignedTo?.name
+            const description = previousAssigne
+            ? `Reasigno la solicitud de ${previousAssigne} a ${employee.name}`
+            : `Asigno la solicitud a ${employee.name}`
+
             await tx.serviceRequest.update({
                 where: {id},
                 data: {
                     assignedToId: employee.id,
-                    assignedAt: new Date(),
+                    assignedAt: changedAt,
+                    updateAt: changedAt,
+                    changes: {
+                        create: {
+                            type: 'ASSIGNED',
+                            description,
+                            createdAt: changedAt,
+                            actor: {connect: {id: admin.id}},
+                        },
+                    },
                 },
             })
 
@@ -200,11 +233,24 @@ export async function changeRequestStatus (requestId, _prevState, formData) {
                 }
             }
 
+            const changedAt = new Date()
+            const previousLabel = STATUS_LABELS[request.status]
+            const nextLabel = STATUS_LABELS[nextStatus]
+
             await tx.serviceRequest.update({
                 where: {id},
                 data: {
                     status: nextStatus,
-                    resolvedAt: nextStatus === 'RESOLVED' ? new Date() : null,
+                    resolvedAt: nextStatus === 'RESOLVED' ? changedAt : null,
+                    updatedAt: changedAt,
+                    changes: {
+                        create: {
+                            type: 'STATUS_CHANGED',
+                            description: `Cambio el estado de «${previousLabel}» a «${nextLabel}»`,
+                            createdAt: changedAt,
+                            actor: { connect: {id: user.id}},
+                        },
+                    },
                 },
             })
 

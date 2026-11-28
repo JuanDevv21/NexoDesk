@@ -24,6 +24,8 @@ model User {
   createdRequests     ServiceRequest[]     @relation("RequestsCreated")
   assignedRequests    ServiceRequest[]     @relation("RequestsAssigned")
   requestComments     RequestComment[]
+
+  requestChanges RequestChange[]
 }
 
 model PasswordResetToken {
@@ -86,6 +88,7 @@ model ServiceRequest {
   userId       Int?
 
   comments RequestComment[]
+  changes  RequestChange[]
 }
 
 model RequestComment {
@@ -98,6 +101,27 @@ model RequestComment {
 
   authorId Int
   author   User @relation(fields: [authorId], references: [id], onDelete: Restrict)
+
+  @@index([requestId, createdAt, id])
+}
+
+enum RequestChangeType {
+  CREATED
+  ASSIGNED
+  STATUS_CHANGED
+}
+
+model RequestChange {
+  id          Int               @id @default(autoincrement())
+  type        RequestChangeType
+  description String            @db.Text
+  createdAt   DateTime          @default(now())
+
+  requestId Int
+  request   ServiceRequest @relation(fields: [requestId], references: [id], onDelete: Restrict)
+
+  actorId Int
+  actor   User @relation(fields: [actorId], references: [id], onDelete: Restrict)
 
   @@index([requestId, createdAt, id])
 }
